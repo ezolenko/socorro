@@ -123,12 +123,12 @@ class CrashMigrationApp(RawAndProcessedCopierApp):
 
         if 'uuid' not in raw_crash:
             raw_crash.uuid = crash_id
-        self.destination.save_raw_and_processed(
-            raw_crash,
-            dumps,
-            processed_crash,
-            crash_id
-        )
+            
+        # S3 saves only processed in save_raw_and_processed
+        self.destination.save_raw_crash(raw_crash, dumps, crash_id) 
+        # ES only implements save_raw_and_processed
+        self.destination.save_raw_and_processed(raw_crash, dumps, processed_crash, crash_id)
+        
         self.config.logger.info('saved - %s', crash_id)
 
 
