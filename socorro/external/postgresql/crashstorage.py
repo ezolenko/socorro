@@ -157,11 +157,14 @@ class PostgreSQLBasicCrashStorage(CrashStorageBase):
         ):
             column_list.append(report_name)
             placeholder_list.append('%s')
-            value = processed_crash[pro_crash_name]
-            if isinstance(value, basestring) and length:
+            if pro_crash_name in processed_crash:
+                value = processed_crash[pro_crash_name]
+                if isinstance(value, basestring) and length:
                     value_list.append(value[:length])
+                else:
+                    value_list.append(value)
             else:
-                value_list.append(value)
+                value_list.append('')
 
         def print_eq(a, b):
             # Helper for UPDATE SQL clause
