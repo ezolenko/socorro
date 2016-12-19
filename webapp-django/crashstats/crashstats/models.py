@@ -657,6 +657,8 @@ class Releases(SocorroMiddleware):
 
     URL_PREFIX = '/releases/release/'
 
+    API_WHITELIST = ()
+
     possible_params = (
         ('beta_number', int),
     )
