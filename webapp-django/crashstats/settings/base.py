@@ -650,7 +650,10 @@ SOCORRO_IMPLEMENTATIONS_CONFIG = {
             'rabbitmq_password': config('RABBITMQ_PASSWORD', ''),
         },
         'boto': {
-            'secret_access_key': config('secrets.boto.secret_access_key', ''),
+            'secret_access_key': config(
+                'secrets.boto.secret_access_key',
+                None
+            ),
         },
     },
     'resource': {
@@ -681,7 +684,7 @@ SOCORRO_IMPLEMENTATIONS_CONFIG = {
             'port': config('RABBITMQ_PORT', 5672),
         },
         'boto': {
-            'access_key': config('resource.boto.access_key', ''),
+            'access_key': config('resource.boto.access_key', None),
             'bucket_name': config(
                 'resource.boto.bucket_name', 'crashstats'),
             'prefix': config('resource.boto.prefix', ''),
