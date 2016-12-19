@@ -11,6 +11,7 @@ from decouple import config, Csv
 
 from bundles import PIPELINE_CSS, PIPELINE_JS
 
+import requests
 
 ROOT = os.path.abspath(
     os.path.join(
@@ -56,6 +57,14 @@ STATIC_URL = '/static/'
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', '', cast=Csv())
 
+EC2_PRIVATE_IP = None
+try:
+    EC2_PRIVATE_IP = requests.get('http://169.254.169.254/latest/meta-data/local-ipv4', timeout=0.01).text
+except requests.exceptions.RequestException:
+    pass
+
+if EC2_PRIVATE_IP:
+    ALLOWED_HOSTS.append(EC2_PRIVATE_IP)
 
 # Name of the top-level module where you put all your apps.
 PROJECT_MODULE = 'crashstats'
