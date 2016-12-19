@@ -120,6 +120,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    # If you run crashstats behind a load balancer, your `REMOTE_ADDR` header
+    # will be that of the load balancer instead of the actual user.
+    # The solution is to instead rely on the `X-Forwarded-For` header.
+    # You ONLY want this if you know you can trust `X-Forwarded-For`.
+    # Make sure this is *before* the `RatelimitMiddleware` middleware.
+    'crashstats.crashstats.middleware.SetRemoteAddrFromForwardedFor',
+
     'waffle.middleware.WaffleMiddleware',
     'ratelimit.middleware.RatelimitMiddleware',
     '%s.tokens.middleware.APIAuthenticationMiddleware' % PROJECT_MODULE,
@@ -268,10 +275,10 @@ SIMPLE_SEARCH_FIELDS = (
 
 # the number of result filter on tcbs
 TCBS_RESULT_COUNTS = (
-    '50',
-    '100',
-    '200',
-    '300'
+    50,
+    100,
+    200,
+    300,
 )
 
 # channels allowed in middleware calls,
@@ -309,7 +316,7 @@ BZAPI_BASE_URL = 'https://bugzilla.mozilla.org/rest'
 ELASTICSEARCH_INDEX_SCHEMA = 'socorro%Y%W'
 
 # Number of shards per index in our Elasticsearch database.
-ES_SHARDS_PER_INDEX = 5
+ES_SHARDS_PER_INDEX = 10
 
 # Valid type for correlations reports
 CORRELATION_REPORT_TYPES = (
@@ -396,16 +403,6 @@ MANAGERS = ADMINS
 
 # import logging
 # LOGGING = dict(loggers=dict(playdoh={'level': logging.DEBUG}))
-
-# If you run crashstats behind a load balancer, your `REMOTE_ADDR` header
-# will be that of the load balancer instead of the actual user.
-# The solution is to instead rely on the `X-Forwarded-For` header.
-# You ONLY want this if you know you can trust `X-Forwarded-For`.
-# (Note! Make sure you uncomment the line `from . import base` at
-# the top of this file first)
-# base.MIDDLEWARE_CLASSES += (
-#     'crashstats.crashstats.middleware.SetRemoteAddrFromForwardedFor',
-# )
 
 # When you don't have permission to upload Symbols you might be confused
 # what to do next. On the page that explains that you don't have permission
